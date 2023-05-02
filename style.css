@@ -1,0 +1,63 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.center {
+  padding-left: calc(50% - 600px);
+  padding-right: calc(50% - 600px);
+}
+
+.header {
+  background-image: url(./img/Rectangle\ 1.png);
+  height: 1024px;
+}
+.header_title {
+  padding-top: 217px;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 78px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+}
+.header_text {
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 32px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+}
+.header_button {
+  background: #9C0332;
+  border-radius: 30px;
+  width: 234.06px;
+  height: 48.6px;
+}
+
+.game__group {
+  background-image: url(./img/fontwo.png);
+  height: 556px;
+}
+.game__group_one {
+  background-image: url(./img/gameone.png);
+}
+.game__group_two {
+  background-image: url(./img/gametwo.png);
+}
+.game__group_three {
+  background-image: url(./img/gamethree.png);
+}
+
+.onegame {
+  background-image: url(./img/fontwo.png);
+}/*# sourceMappingURL=style.css.map */
