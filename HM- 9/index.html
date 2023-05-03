@@ -104,7 +104,10 @@
         <div class="comment-body">
         <div class="comment-text">${commentInputElement.value}</div>
         <div class="comment-footer"><div class="likes"> <span class="likes-counter">0</span><button class="like-button"></button></div></div>
-        </li>`
+      </li>`
+
+      commentInputElement.value = '';
+      nameInputElement.value = ''
   });
 
 </script>
