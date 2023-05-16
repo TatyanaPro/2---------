@@ -68,3 +68,17 @@ alert (user.user);
 /*let name = prompt ('Как Вас зовут?');
 alert(`Привет, ${name}!`);*/
 
+
+
+
+
+
+// let user = {
+    // name: "John",
+    // name: "John",
+    // age: 30,
+    // age: 30,
+    // isAdmin: true
+//   };
+// 
+//   console.log(user);

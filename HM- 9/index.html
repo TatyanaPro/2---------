@@ -4,12 +4,12 @@
 <head>
   <title>Проект "Комменты"</title>
   <meta charset="utf-8" />
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
   <div class="container">
-    <ul class="comments" id="list-comments" >                  
+    <ul class="comments" id="list-comments">
     </ul>
     <div class="add-form">
       <input type="text" id="text-name" value="" class="add-form-name" placeholder="Введите ваше имя" />
@@ -27,7 +27,6 @@
     border-color: red;
     border-width: 8px;
   }
-
 </style>
 
 <script>
@@ -46,7 +45,23 @@
     const hours = now.getHours().toString().padStart(2, '0');
     const minutes = now.getMinutes().toString().padStart(2, '0');
     return `${day}.${month}.${year} ${hours}:${minutes}`;
-  }
+  };
+
+
+  // const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+    // {
+      // method: "GET",
+    // });
+
+  // fetchPromise.then((response) => {
+    // const jsonPromise = response.json();
+    // jsonPromise.then((responseData) => {
+      console.log(responseData);
+
+      // let comments = responseData.comments;
+      // renderComments();
+    // });
+  // });
 
 
 
@@ -80,12 +95,10 @@
           comments[index].isLiked = true;
           comments[index].likes++;
           likeCounter[index].textContent = comments[index].likes;
-          likeButtonsElements[index].classList.add('-active-like');
         } else if (comments[index].isLiked === true) {
           comments[index].isLiked = false;
           comments[index].likes--;
           likeCounter[index].textContent = comments[index].likes;
-          likeButtonsElements[index].classList.remove('-active-like');
         }
         renderComments();
       })
@@ -96,30 +109,34 @@
 
 
   const renderComments = () => {
-  const commentHtml = comments.map((comment, index) => (
-   `<li class="comment">
+    const commentHtml = comments.map((comment, index) => (
+      `<li class="comment">
       <div class="comment-header">
          <div>${comment.name}</div>
          <div>${comment.date}</div>
       </div> 
         <div class="comment-body">
         <div class="comment-text">${comment.comment}</div>
-        <div class="comment-footer"><div class="likes"> <span class="likes-counter">${comment.likes}</span><button class="like-button ${comment.isLiked? "-active-like" : ""}" data-index="${index}"></button></div></div>
+        <div class="comment-footer"><div class="likes"> <span class="likes-counter">${comment.likes}</span>
+        <button class="like-button ${comment.isLiked ? "-active-like" : ""}" data-index="${index}"></button></div></div>
    </li>`
-   )).join('');
-   listElement.innerHTML = commentHtml;
-   initEventButton();
+    )).join('');
+    listElement.innerHTML = commentHtml;
+    initEventButton();
   };
   renderComments();
 
 
-  // const answerComment = () => {
-    // const textComment = document.querySelectorAll (".comment-text");
-    // for (){
-      // textComment.addEventListener('click',()=>{
-      // })
-    // }
-  // }
+  const textComment = document.querySelectorAll(".comment-text");
+  const textarea = document.querySelector(".add-form-text");
+   textComment.forEach(element => {
+   element.addEventListener("click", (event) => {
+    let content = event.target.innerHTML
+    console.log(content);
+    textarea.value=content;
+    console.log(textarea);
+  });
+  });
 
 
   buttonElement.addEventListener("click", () => {
@@ -136,16 +153,30 @@
     }
 
     comments.push({
-      name: nameInputElement.value.replaceAll('<','&lt').replaceAll('>','&gt'),
+      name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
       likes: "0",
       comment: commentInputElement.value,
       date: getCurrentDate(),
       isLiked: false
     });
 
+
+    // const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+      // {
+        // method: "POST",
+      // });
+    // fetchPromise.then((response) => {
+      // const jsonPromise = response.json();
+      // jsonPromise.then((responseData) => {
+        // console.log(responseData);
+        // let comments = responseData.comments;
+        // renderComments();
+      // });
+    // });
+
     renderComments();
     initEventButton();
-    
+
 
 
     commentInputElement.value = '';
