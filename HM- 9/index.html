@@ -56,11 +56,12 @@
   fetchPromise.then((response) => {
     const jsonPromise = response.json();
     jsonPromise.then((responseData)=>{
-      comments=responseData;
-      console.log(comments);
-      renderComments ()
-    })
+      comments=responseData.comments;
+       console.log(comments);
+      renderComments ();
+    });
   });
+    console.log(comments);
     
 
 
@@ -133,10 +134,10 @@
     textComment.forEach(element => {
       element.addEventListener("click", (event) => {
         console.log(textComment.dataset.text);
-        // let content = event.target.innerHTML
-        // console.log(content);
-        // textarea.value = content;
-        // console.log(textarea);
+        let content = event.target.innerHTML
+        console.log(content);
+        textarea.value = content;
+        console.log(textarea);
       });
     });
   };
