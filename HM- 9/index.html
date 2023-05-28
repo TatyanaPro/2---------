@@ -47,37 +47,39 @@
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   };  
 
-  
+  let comments = [];
+
   const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
   {
     method: "GET",
   });
-
   fetchPromise.then((response) => {
-
     const jsonPromise = response.json();
-
-    console.log(jsonPromise);
+    jsonPromise.then((responseData)=>{
+      comments=responseData;
+      console.log(comments);
+      renderComments ()
+    })
   });
     
 
 
-  const comments = [
-    {
-      name: "Глеб Фокин",
-      likes: '3',
-      comment: "Это будет первый комментарий на этой странице",
-      date: "12.02.22 12:18",
-      isLiked: false
-    },
-    {
-      name: "Варвара Н.",
-      likes: '75',
-      comment: "Мне нравится как оформлена эта страница! ❤",
-      date: "13.02.22 19:22",
-      isLiked: false
-    }
-  ];
+  // const comments = [
+    // {
+      // name: "Глеб Фокин",
+      // likes: '3',
+      // comment: "Это будет первый комментарий на этой странице",
+      // date: "12.02.22 12:18",
+      // isLiked: false
+    // },
+    // {
+      // name: "Варвара Н.",
+      // likes: '75',
+      // comment: "Мне нравится как оформлена эта страница! ❤",
+      // date: "13.02.22 19:22",
+      // isLiked: false
+    // }
+  // ];
 
 
 
