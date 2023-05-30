@@ -47,41 +47,50 @@
     return `${day}.${month}.${year} ${hours}:${minutes}`;
   };
 
-  // let comments = [];
+  let comment = [];
 
-  // const takeComments = () => {
-    // const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
-      // {
-        // method: "GET",
-      // });
-    // fetchPromise.then((response) => {
-      // const jsonPromise = response.json();
-      // jsonPromise.then((responseData) => {
-        // comments = responseData.comments;
-        // console.log(comments);
-        // renderComments();
-      // });
-    // });
-    // console.log(comments);
-  // };
+  const takeComments = () => {
+    const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+      {
+        method: "GET",
+      });
+    fetchPromise.then((response) => {
+      const jsonPromise = response.json();
+      jsonPromise.then((responseData) => {
+        console.log(responseData.comments);
+        const appComments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            date: getCurrentDate(comment.date),
+            comment: comment.text,
+            likes: comment.likes,
+            isLiked: false,
+          }
+        })
+        comment = appComments;
+        renderComments();
+      });
+    });
+  };
+  takeComments();
 
 
-  const comment = [
-    {
-      name: "Глеб Фокин",
-      likes: '3',
-      comment: "Это будет первый комментарий на этой странице",
-      date: "12.02.22 12:18",
-      isLiked: false
-    },
-    {
-      name: "Варвара Н.",
-      likes: '75',
-      comment: "Мне нравится как оформлена эта страница! ❤",
-      date: "13.02.22 19:22",
-      isLiked: false
-    }
-  ];
+  // const comment = [
+  // {
+  // name: "Глеб Фокин",
+  // likes: '3',
+  // comment: "Это будет первый комментарий на этой странице",
+  // date: "12.02.22 12:18",
+  // isLiked: false
+  // },
+  // {
+  // name: "Варвара Н.",
+  // likes: '75',
+  // comment: "Мне нравится как оформлена эта страница! ❤",
+  // date: "13.02.22 19:22",
+  // isLiked: false
+  // }
+  // ];
 
 
 
@@ -91,7 +100,7 @@
     for (let index = 0; index < likeButtonsElements.length; index++) {
       likeButtonsElements[index].addEventListener('click', (event) => {
         event.stopPropagation();
-        
+
         console.log(comment[index]);
         if (comment[index].isLiked) {
           comment[index].likes--
@@ -147,20 +156,6 @@
   };
 
 
-
-  // textComment.forEach(element => {
-  // element.addEventListener("click", (event) => {
-  // console.log(textComment.dataset.text);
-  // let content = event.target.innerHTML
-  // console.log(content);
-  // textarea.value = content;
-  // console.log(textarea);
-  // });
-  // });
-  // };
-  // answerComment();
-
-
   buttonElement.addEventListener("click", () => {
     nameInputElement.classList.remove("error");
     commentInputElement.classList.remove("error");
@@ -174,38 +169,45 @@
       return;
     }
 
-    comments.push({
-      name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-      likes: "0",
-      comment: commentInputElement.value,
-      date: getCurrentDate(),
-      isLiked: false
-    });
+    // comments.push({
+    // name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+    // likes: "0",
+    // comment: commentInputElement.value,
+    // date: getCurrentDate(),
+    // isLiked: false
+    // });
 
-
-    // const postFetch = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
-      // {
-        // method: "POST",
-        // body: JSON.stringify({
-          // name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-          // text: commentInputElement.value,
-        // }),
-      // }).then((response) => {
-        // response.json().then((responseData) => {
-          // comments = responseData.comments;
-          // fetchPromise();
-          // renderComments();
-        // });
-      // });
-
+ 
+    // addComment();
     renderComments();
     initEventButton();
 
-
-
     commentInputElement.value = '';
     nameInputElement.value = '';
+    
+    addComment();
   });
+
+  const addComment = () => {
+   const postFetch = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+     {
+       method: "POST",
+       body: JSON.stringify({
+         name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+         text: commentInputElement.value,
+       }),
+     });
+     
+     postFetch.then((response) => {
+       const jsonPromise = response.json();
+       jsonPromise.then((responseData) => {
+         comment = responseData.comments;
+         fetchPromise();
+         renderComments();
+       });
+     });
+     renderComments();
+  };
 
 </script>
 
