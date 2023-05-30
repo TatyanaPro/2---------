@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Проект "Комменты"</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <ul class="comments" id="list-comments">
+    </ul>
+    <div class="add-form">
+      <input type="text" id="text-name" value="" class="add-form-name" placeholder="Введите ваше имя" />
+      <textarea type="textarea" id="text-comment" value="" class="add-form-text" placeholder="Введите ваш коментарий"
+        rows="4"></textarea>
+      <div class="add-form-row">
+        <button class="add-form-button" id="add-button">Написать</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+<style>
+  .error {
+    border-color: red;
+    border-width: 8px;
+  }
+</style>
+
+<script>
+  "use strict";
+  const buttonElement = document.getElementById('add-button');
+  const listElement = document.getElementById('list-comments');
+  const nameInputElement = document.getElementById('text-name');
+  const commentInputElement = document.getElementById('text-comment');
+  const date = new Date();
+
+  function getCurrentDate() {
+    const now = new Date();
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const year = now.getFullYear().toString();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    return `${day}.${month}.${year} ${hours}:${minutes}`;
+  };
+
+  let comment = [];
+
+  const takeComments = () => {
+    const fetchPromise = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+      {
+        method: "GET",
+      });
+    fetchPromise.then((response) => {
+      const jsonPromise = response.json();
+      jsonPromise.then((responseData) => {
+        console.log(responseData.comments);
+        const appComments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            date: getCurrentDate(comment.date),
+            text: comment.text,
+            likes: comment.likes,
+            isLiked: false,
+          }
+        })
+        comment = appComments;
+        console.log(comment);
+        renderComments();
+      });
+    });
+  };
+  takeComments();
+
+
+
+
+  const initEventButton = () => {
+    const likeButtonsElements = document.querySelectorAll(".like-button");
+    const likeCounter = document.querySelectorAll(".likes-counter");
+    for (let index = 0; index < likeButtonsElements.length; index++) {
+      likeButtonsElements[index].addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        console.log(comment[index]);
+        if (comment[index].isLiked) {
+          comment[index].likes--
+          likeCounter[index].textContent = comment[index].likes;
+        } else {
+          comment[index].likes++;
+          likeCounter[index].textContent = comment[index].likes;
+        }
+        comment[index].isLiked = !comment[index].isLiked;
+        renderComments();
+      })
+    }
+  };
+  initEventButton();
+
+
+
+  const renderComments = () => {
+    const commentHtml = comment.map((comment, index) => {
+
+      return `<li data-index="${index}" class="comment">
+      <div class="comment-header">
+         <div>${comment.name}</div>
+         <div>${comment.date}</div>
+      </div> 
+        <div class="comment-body">
+        <div class="comment-text">${comment.text}</div>
+        <div class="comment-footer"><div class="likes"> <span class="likes-counter">${comment.likes}</span>
+        <button class="like-button ${comment.isLiked ? "-active-like" : ""}" data-index="${index}"></button></div></div>
+   </li>`;
+    }).join('');
+    listElement.innerHTML = commentHtml;
+
+    initEventButton();
+    answerComment();
+  };
+  renderComments();
+
+
+  function answerComment() {
+    const textComments = document.querySelectorAll(".comment");
+
+    for (let textComment of textComments) {
+      textComment.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        const index = textComment.dataset.index;
+        const comments = comment[index];
+
+        commentInputElement.value = `${comments.text}\n ${comments.name}`;
+      })
+    }
+  };
+
+
+  buttonElement.addEventListener("click", () => {
+    nameInputElement.classList.remove("error");
+    commentInputElement.classList.remove("error");
+    if (nameInputElement.value === "") {
+      nameInputElement.classList.add("error");
+      return;
+    }
+
+    if (commentInputElement.value === "") {
+      commentInputElement.classList.add("error");
+      return;
+    };
+
+    initEventButton();
+    addComment();
+
+  });
+
+  const addComment = () => {
+    const postFetch = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+          text: commentInputElement.value,
+        }),
+      });
+
+    postFetch.then((response) => {
+      const jsonPromise = response.json();
+      jsonPromise.then((responseData) => {
+        comment = responseData.comments;
+        takeComments();
+      });
+    });
+
+    commentInputElement.value = '';
+    nameInputElement.value = '';
+  };
+
+</script>
+
+</html>
