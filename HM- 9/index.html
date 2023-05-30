@@ -178,14 +178,12 @@
     // });
 
  
-    // addComment();
     renderComments();
     initEventButton();
+    addComment();
 
     commentInputElement.value = '';
     nameInputElement.value = '';
-    
-    addComment();
   });
 
   const addComment = () => {
@@ -202,7 +200,7 @@
        const jsonPromise = response.json();
        jsonPromise.then((responseData) => {
          comment = responseData.comments;
-         fetchPromise();
+         takeComments();
          renderComments();
        });
      });
