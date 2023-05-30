@@ -62,35 +62,19 @@
           return {
             name: comment.author.name,
             date: getCurrentDate(comment.date),
-            comment: comment.text,
+            text: comment.text,
             likes: comment.likes,
             isLiked: false,
           }
         })
         comment = appComments;
+        console.log(comment);
         renderComments();
       });
     });
   };
   takeComments();
 
-
-  // const comment = [
-  // {
-  // name: "Глеб Фокин",
-  // likes: '3',
-  // comment: "Это будет первый комментарий на этой странице",
-  // date: "12.02.22 12:18",
-  // isLiked: false
-  // },
-  // {
-  // name: "Варвара Н.",
-  // likes: '75',
-  // comment: "Мне нравится как оформлена эта страница! ❤",
-  // date: "13.02.22 19:22",
-  // isLiked: false
-  // }
-  // ];
 
 
 
@@ -127,7 +111,7 @@
          <div>${comment.date}</div>
       </div> 
         <div class="comment-body">
-        <div class="comment-text">${comment.comment}</div>
+        <div class="comment-text">${comment.text}</div>
         <div class="comment-footer"><div class="likes"> <span class="likes-counter">${comment.likes}</span>
         <button class="like-button ${comment.isLiked ? "-active-like" : ""}" data-index="${index}"></button></div></div>
    </li>`;
@@ -150,7 +134,7 @@
         const index = textComment.dataset.index;
         const comments = comment[index];
 
-        commentInputElement.value = `${comments.comment}\n ${comments.name}`;
+        commentInputElement.value = `${comments.text}\n ${comments.name}`;
       })
     }
   };
@@ -167,44 +151,33 @@
     if (commentInputElement.value === "") {
       commentInputElement.classList.add("error");
       return;
-    }
+    };
 
-    // comments.push({
-    // name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-    // likes: "0",
-    // comment: commentInputElement.value,
-    // date: getCurrentDate(),
-    // isLiked: false
-    // });
-
- 
-    renderComments();
     initEventButton();
     addComment();
 
-    commentInputElement.value = '';
-    nameInputElement.value = '';
   });
 
   const addComment = () => {
-   const postFetch = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
-     {
-       method: "POST",
-       body: JSON.stringify({
-         name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
-         text: commentInputElement.value,
-       }),
-     });
-     
-     postFetch.then((response) => {
-       const jsonPromise = response.json();
-       jsonPromise.then((responseData) => {
-         comment = responseData.comments;
-         takeComments();
-         renderComments();
-       });
-     });
-     renderComments();
+    const postFetch = fetch("https://webdev-hw-api.vercel.app/api/v1/tatyana-pro/comments",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          name: nameInputElement.value.replaceAll('<', '&lt').replaceAll('>', '&gt'),
+          text: commentInputElement.value,
+        }),
+      });
+
+    postFetch.then((response) => {
+      const jsonPromise = response.json();
+      jsonPromise.then((responseData) => {
+        comment = responseData.comments;
+        takeComments();
+      });
+    });
+
+    commentInputElement.value = '';
+    nameInputElement.value = '';
   };
 
 </script>
